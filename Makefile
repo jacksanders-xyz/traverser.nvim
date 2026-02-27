@@ -4,9 +4,11 @@ ROOT := $(shell pwd)
 test:
 	nvim --clean -u test/init.lua
 
-# Same, but open a specific file for testing
+# Open a specific file, with cwd set to that file's directory
+# so LSP servers (gopls, etc.) can find project roots.
+# Usage: make test-file FILE=/path/to/main.go
 test-file:
-	nvim --clean -u test/init.lua $(FILE)
+	cd $(dir $(FILE)) && nvim --clean -u $(ROOT)/test/init.lua $(FILE)
 
 # Clean test artifacts
 clean:

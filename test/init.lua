@@ -115,7 +115,41 @@ require("lazy").setup({
 		end,
 	},
 
-	-- A language server for testing (optional, uncomment what you need)
-	-- { "neovim/nvim-lspconfig" },
-	-- { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	-- Treesitter: for highlights, indent, etc.
+	{ "nvim-treesitter/nvim-treesitter" },
 })
+
+-- Parsers: Neovim 0.11+ can install parsers natively via vim.treesitter.
+-- We also add the system parser path so parsers from your normal nvim work here.
+do
+	-- Reuse parsers already compiled in your main nvim install
+	local system_parsers = vim.fn.expand("~/.local/share/nvim/lazy/nvim-treesitter/parser")
+	if vim.fn.isdirectory(system_parsers) == 1 then
+		vim.opt.runtimepath:append(system_parsers .. "/..")
+	end
+end
+
+------------------------------------------------------------------------
+-- LSP via built-in vim.lsp.config (nvim 0.11+)
+-- Add/remove servers as needed.
+------------------------------------------------------------------------
+vim.lsp.config("gopls", {
+	cmd = { "gopls" },
+	filetypes = { "go", "gomod", "gowork", "gotmpl" },
+	root_markers = { "go.mod", "go.work", ".git" },
+})
+vim.lsp.enable("gopls")
+
+-- vim.lsp.config("ts_ls", {
+-- 	cmd = { "typescript-language-server", "--stdio" },
+-- 	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+-- 	root_markers = { "tsconfig.json", "package.json", ".git" },
+-- })
+-- vim.lsp.enable("ts_ls")
+
+-- vim.lsp.config("lua_ls", {
+-- 	cmd = { "lua-language-server" },
+-- 	filetypes = { "lua" },
+-- 	root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
+-- })
+-- vim.lsp.enable("lua_ls")

@@ -52,48 +52,22 @@ local function make_on_change(code_win_id)
 end
 
 ------------------------------------------------------------
--- Layout that fits the current editor window
-------------------------------------------------------------
-local function editor_fit_layout()
-	local win = vim.api.nvim_get_current_win()
-	local ww = vim.api.nvim_win_get_width(win)
-	local wh = vim.api.nvim_win_get_height(win)
-	local win_row, win_col = unpack(vim.api.nvim_win_get_position(win))
-
-	return {
-		layout = {
-			backdrop = false,
-			row = win_row,
-			col = win_col,
-			width = ww,
-			height = wh,
-			border = "rounded",
-			{
-				win = "list",
-				border = "none",
-			},
-			{
-				win = "input",
-				height = 1,
-				border = "top",
-			},
-		},
-	}
-end
-
-------------------------------------------------------------
 -- Symbol picker with peek support
 ------------------------------------------------------------
 function M.symbols_picker(kind)
 	local code_win_id = vim.api.nvim_get_current_win()
-	local source = (kind == "ws") and "lsp_workspace_symbols" or "lsp_symbols"
 
-	Snacks.picker.pick(source, {
-		layout = editor_fit_layout(),
+	local opts = {
+		layout = { preset = "vertical" },
 		on_change = make_on_change(code_win_id),
-		-- Jump on confirm (default), peek on cursor movement
 		jump = { close = true },
-	})
+	}
+
+	if kind == "ws" then
+		Snacks.picker.lsp_workspace_symbols(opts)
+	else
+		Snacks.picker.lsp_symbols(opts)
+	end
 end
 
 ------------------------------------------------------------
@@ -113,7 +87,8 @@ function M.switch_trace_picker()
 		})
 	end
 
-	Snacks.picker.pick({
+	Snacks.picker({
+		source = "traverser_traces",
 		title = "Traverser Traces",
 		items = items,
 		format = "text",
@@ -130,7 +105,6 @@ function M.switch_trace_picker()
 				if item then
 					traces.delete_trace(item.trace_index)
 					picker:close()
-					-- Re-open so the list refreshes
 					vim.schedule(function()
 						M.switch_trace_picker()
 					end)
