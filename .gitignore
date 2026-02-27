@@ -1,0 +1,10 @@
+# Test environment artifacts
+.test/
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
