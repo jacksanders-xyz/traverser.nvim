@@ -1,6 +1,9 @@
 # traverser.nvim
 
-A code exploration dashboard for Neovim. Combines Trouble.nvim, edgy.nvim, and LSP into a persistent, multi-pane workspace with a trace/bookmark system for navigating code paths across files.
+A code exploration dashboard for Neovim. Combines [Trouble.nvim](https://github.com/folke/trouble.nvim), [edgy.nvim](https://github.com/folke/edgy.nvim), and LSP into a persistent, multi-pane workspace with a trace/bookmark system for navigating code paths across files.
+All credit to  [folke](https://github.com/folke), this is less a plugin, and more a frankenstein monster of a bunch folke ideas.
+It's a workflow that is achieved via his plugins. If this is too much for you I urge you to check out his work.
+
 
 ## Features
 
